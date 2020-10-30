@@ -1,4 +1,4 @@
-#go-tracked-error
+# go-tracked-error
 Keep track of your errors while passing them through multiple functions. Very pragmatic library which enhances
 the default error interface with a slice of tracks. Free of transitive dependencies.
 
