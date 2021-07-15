@@ -13,7 +13,9 @@ type terr struct {
 
 func Of(originError error) *terr {
 	e, ok := originError.(*terr)
-	if !ok {
+	if !ok && originError == nil {
+		e = &terr{tracks: []string{"nil"}}
+	} else if !ok {
 		e = &terr{tracks: []string{originError.Error()}}
 	}
 	return e
@@ -30,7 +32,10 @@ func Track(originError error, msg ...string) *terr {
 		log.Fatalf("cannot get the caller to create the gauge from %v", originError)
 	}
 	e, ok := originError.(*terr)
-	if !ok {
+	if !ok && originError == nil {
+		e = &terr{}
+		msg = append([]string{"nil"}, msg...)
+	} else if !ok {
 		e = &terr{}
 		msg = append([]string{originError.Error()}, msg...)
 	}
@@ -46,4 +51,3 @@ func (e *terr) add(file string, line int, msg ...string) *terr {
 func (e *terr) Error() string {
 	return strings.Join(e.tracks, "\n\t")
 }
-
